@@ -4,8 +4,7 @@
  */
 export const publicRoutes = [
     "/",
-    "/about",
-    "/contact",
+    "/about"
 ]
 
 /**
@@ -15,8 +14,6 @@ export const publicRoutes = [
  */
 export const authRoutes = [
     "/auth/login",
-    "/auth/register",
-    "/auth/error",
 ]
 
 /**
@@ -37,15 +34,5 @@ export const DEFAULT_LOGIN_REDIRECT = "/chat"
  * @type {string[]}
  */
 export const protectedRoutes = [
-    "/dashboard",
-    "/settings",
-    "/profile",
-]
-
-/**
- * An array of admin route of the application.
- * @type {string[]}
- */
-export const adminRoute = [
-    "/dashboard/admin",
+    "/chat",
 ]

@@ -1,21 +1,16 @@
 import type { NextAuthConfig } from 'next-auth';
+import Google from "next-auth/providers/google";
+import Github from "next-auth/providers/github";
 
 export const authConfig = {
-    pages: {
-        signIn: '/auth/login',
-    },
-    callbacks: {
-        authorized({ auth, request: { nextUrl } }) {
-            const isLoggedIn = !!auth?.user;
-            const isOnDashboard = nextUrl.pathname.startsWith('/chat');
-            if (isOnDashboard) {
-                return isLoggedIn;
-                 // Redirect unauthenticated users to login page
-            } else if (isLoggedIn) {
-                return Response.redirect(new URL('/chat', nextUrl));
-            }
-            return true;
-        },
-    },
-    providers: [], // Add providers with an empty array for now
+    providers: [
+        Google({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        }),
+        Github({
+            clientId: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        }),
+    ],
 } satisfies NextAuthConfig;
