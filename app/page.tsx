@@ -10,7 +10,7 @@ export default function Home() {
     <main className="px-3 max-w-[1200px] mx-auto">
       <div className="flex items-center h-screen">
         <div className="text-center pt-[60px] max-w-[1000px] mx-auto  leading-snug sm:leading-relaxed">
-          <h1 className="text-5xl lg:text-6xl  font-extrabold bg-gradient-to-r from-primary via-foreground/60 dark:via-foreground/40 to-primary/50 bg-clip-text text-transparent tracking-tighter">
+          <h1 className="text-3xl lg:text-6xl  font-extrabold bg-gradient-to-r from-primary via-foreground/60 dark:via-foreground/40 to-primary/50 bg-clip-text text-transparent tracking-tighter">
             Chatbox interactive optimisée par l&#039; Intelligence Artificielle</h1>
           <p className="text-2xl lg:text-3xl font-bold mt-3 text-foreground/70 dark:text-foreground/50">
             Expérimentez une nouvelle façon de communiquer avec une IA.
