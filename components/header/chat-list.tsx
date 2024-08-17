@@ -4,6 +4,8 @@ import { Chat } from "@prisma/client";
 import Link from "next/link";
 import * as React from "react";
 import { usePathname } from "next/navigation";
+import { Button } from "../ui/button";
+import { MessageCirclePlus } from "lucide-react";
 
 export default function ChatList({ chats }: { chats?: Chat[] }) {
 	const { isOpen, toggle } = useChatList();
@@ -21,15 +23,24 @@ export default function ChatList({ chats }: { chats?: Chat[] }) {
 			</div>
 			<div className="px-4 py-2 max-h-[calc(100vh-125px)] overflow-y-auto">
 				<div className="flex flex-col gap-1">
+					<Link
+						href={`/chat`}
+						className="text-sm font-medium my-1"
+					>
+						<Button className="w-full gap-2" variant={"outline"}>
+							<MessageCirclePlus size={18}/> Nouveau chat
+						</Button>
+					</Link>
 					{chats?.map((chat, index) => (
 						<Link
 							href={`/chat/${chat.id}`}
 							key={index}
 							className={`text-sm font-medium hover:bg-foreground/5 rounded-md px-3 py-3 ${
-								pathname === `/chat/${chat.id}` && "bg-foreground/5"
+								pathname === `/chat/${chat.id}` &&
+								"bg-foreground/5"
 							}`}
 						>
-							<span>{chat.name.replace('"',"")}</span>
+							<span>{chat.name.replace('"', "")}</span>
 						</Link>
 					))}
 				</div>
