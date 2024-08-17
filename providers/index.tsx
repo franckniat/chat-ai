@@ -13,7 +13,7 @@ export default function Providers({children}:{children:React.ReactNode}){
             <ProgressBar
                 options={{ showSpinner: true }}
                 height="4px"
-                color="#eab308"
+                color="#8b5cf6"
             />
             <Toaster richColors closeButton />
             <ChatListProvider>
