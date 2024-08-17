@@ -29,15 +29,10 @@ export default middleware(
 
         const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-        if (isApiAuthRoute) return;
 
         if (isAuthRoute) {
             if (isLoggedIn) {
-                if(callbackUrl){
-                    return Response.redirect(new URL(callbackUrl, nextUrl))
-                } else {
-                    return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-                }
+                return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
             }
             return;
         }
