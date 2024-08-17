@@ -56,6 +56,8 @@ export const createNewChat = async (userId: string, prompt: string) => {
         }
     })
 
+    revalidatePath(`/chat/${chatID}`)
+
     return {
         chatID,
         userMessage,
