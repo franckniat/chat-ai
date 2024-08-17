@@ -13,7 +13,9 @@ import {
 } from "@/actions/message";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { ArrowDown, Loader2 } from "lucide-react";
+import { ArrowDown, BookOpen, Calendar, Loader2, Mail, Wrench } from "lucide-react";
+import { Card, CardContent } from "../ui/card";
+import Link from "next/link";
 
 export default function MessagesContent({
 	chatID,
@@ -22,6 +24,29 @@ export default function MessagesContent({
 	chatID: string;
 	messages: Message[];
 }) {
+
+	const newChatOptions = [
+		{
+			title: "Aide moi à résumer ce mail",
+			content: "Aide moi à résumer ce mail",
+			icon: <Mail size={24} />,
+		},
+		{
+			title: "J'ai besoin de planifier mes journées",
+			content: "J'ai besoin de planifier mes journées",
+			icon: <Calendar size={24} />,
+		},
+		{
+			title: "Quels sont les avantages des nouvelles technologies ?",
+			content: "Quels sont les avantages des nouvelles technologies ?",
+			icon: <Wrench size={24} />,
+		},
+		{
+			title: "J'ai besoin d'aide pour rédiger un mémoire",
+			content: "J'ai besoin d'aide pour rédiger un mémoire",
+			icon: <BookOpen size={24} />,
+		},
+	]
 	const user = useCurrentUser();
 	const router = useRouter();
 	const [input, setInput] = React.useState("");
@@ -42,7 +67,7 @@ export default function MessagesContent({
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
-					if (entry.isIntersecting===false) {
+					if (entry.isIntersecting === false) {
 						scrollButton.current?.classList.remove("hide");
 					} else {
 						scrollButton.current?.classList.add("hide");
@@ -58,6 +83,16 @@ export default function MessagesContent({
 			};
 		}
 	}, [messagesEndRef]);
+
+	const handleCreateChatByPrompt = async (content: string) => {
+		await createNewChat(user!.id as string, content).then((res) => {
+			if (res.error) {
+				toast.error(res.error);
+			} else if (res.chatID && res.IAMessage && res.userMessage) {
+				router.push(`/chat/${res.chatID}`);
+			}
+		});
+	}
 
 	const handleSendMessage = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -108,7 +143,7 @@ export default function MessagesContent({
 
 	return (
 		<div className="relative">
-			<div ref={messagesRef} className="space-y-5">
+			<div ref={messagesRef} className="space-y-5 mx-3">
 				{messagesData &&
 					messagesData.map((m) => (
 						<div key={m.id} className="flex gap-2 py-6 relative">
@@ -149,6 +184,30 @@ export default function MessagesContent({
 						</div>
 					))}
 			</div>
+			{chatID === "" && (
+				<div className="max-w-3xl mx-auto px-3 pt-[50px]">
+					<h1 className="text-3xl text-center font-bold">N<span className="text-primary">C</span></h1>
+					<h2 className="text-xl font-semibold text-center my-3">
+						Commencer à discuter avec l&#39;assistant
+					</h2>
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 text-sm">
+						{newChatOptions.map((option, index) => (
+							<Card
+								key={index}
+								className="cursor-pointer hover:bg-foreground/5"
+								onClick={() => handleCreateChatByPrompt(option.content)}
+							>
+								<CardContent className="flex justify-center gap-3 flex-col items-center p-3 text-foreground/60">
+									{option.icon}
+									<span className="text-center">
+										{option.title}
+									</span>
+								</CardContent>
+							</Card>
+						))}
+					</div>
+				</div>
+			)}
 			<div
 				ref={scrollButton}
 				className="flex justify-center items-center fixed bottom-0 -translate-y-[140px] -translate-x-1/2 left-1/2 transition-transform duration-200 scroll-button hide"
