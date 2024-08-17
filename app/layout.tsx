@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Providers from "@/providers";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 
 const dmsans = DM_Sans({ subsets: ["latin"] });
+const spacegrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI Playground",
-  description: "Plateforme de messagerie instantanée optimisée par l'Intelligence Artificielle",
+	title: "AI Playground",
+	description:
+		"Plateforme de messagerie instantanée optimisée par l'Intelligence Artificielle",
 };
 
 export default async function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  const session = await auth();
-  return (
-    <html lang="fr">
-      <body className={`${dmsans.className} antialiased`}>
-        <SessionProvider session={session}>
-          <Providers>
-            {children}
-          </Providers>
-        </SessionProvider>
-      </body>
-    </html>
-  );
+	const session = await auth();
+	return (
+		<html lang="fr">
+			<body className={`${spacegrotesk.className} antialiased`}>
+				<SessionProvider session={session}>
+					<Providers>{children}</Providers>
+				</SessionProvider>
+			</body>
+		</html>
+	);
 }
