@@ -18,11 +18,11 @@ export const createNewChat = async (userId: string, prompt: string) => {
     const chatID = uuidv4();
 
     const result = await streamText({
-        model: openai("gpt-4"),
+        model: openai("gpt-4o"),
         prompt: `Prend ce message et reformule le moi en titre de conversation: ${prompt} `,
     })
     const resultPrompt = await streamText({
-        model: openai('gpt-4'),
+        model: openai('gpt-4o'),
         prompt: prompt,
     })
 
@@ -88,7 +88,7 @@ export const sendUserMessage = async (userId: string, chatId: string, message: s
 export const chatCompletion = async (userId: string, chatId: string, message: string) => {
     try {
         const result = await streamText({
-            model: openai("gpt-4"),
+            model: openai("gpt-4o"),
             prompt: message,
         });
         const IAResponse = (await result.toTextStreamResponse().text()).trim()
