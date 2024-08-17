@@ -22,7 +22,7 @@ export default function AuthForm() {
                 </CardHeader>
                 <CardContent>
                     <div className="flex-col flex gap-3 w-full">
-                        <Button 
+                        {/* <Button 
                             onClick={()=>handleSignInWithProvider("google")}
                             className="gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20px" height="20px">
@@ -32,7 +32,7 @@ export default function AuthForm() {
                                 <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
                             </svg>
                             Continuer avec Google
-                        </Button>
+                        </Button> */}
                         <Button 
                             onClick={()=>handleSignInWithProvider("github")}
                             variant={"secondary"} 
