@@ -4,6 +4,7 @@ import type { ThemeProviderProps } from "next-themes/dist/types";
 import * as React from "react";
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 import ChatListProvider from "./chat-list";
+import { Toaster } from "@/components/ui/sonner";
 
 
 export default function Providers({children}:{children:React.ReactNode}){
@@ -14,6 +15,7 @@ export default function Providers({children}:{children:React.ReactNode}){
                 height="4px"
                 color="#eab308"
             />
+            <Toaster richColors closeButton />
             <ChatListProvider>
                 {children}
             </ChatListProvider>
