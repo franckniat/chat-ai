@@ -2,12 +2,9 @@
 
 import { db } from "@/lib/db";
 import { openai } from "@ai-sdk/openai";
-import { streamText, StreamingTextResponse } from "ai";
-import { APICallError, RetryError } from "ai";
-import { z } from "zod";
+import { streamText } from "ai";
 import { v4 as uuidv4 } from 'uuid';
 import { revalidatePath } from "next/cache";
-import type { Message } from "ai";
 
 export const getMessagesBychatId = async (chatId: string) => {
     return db.message.findMany({
@@ -108,41 +105,6 @@ export const chatCompletion = async (userId: string, chatId: string, message: st
     } catch (e) {
         return {
             error: "Un problème est survenu, vérifier votre connexion internet."
-        }
-    }
-}
-
-export const sendMessage = async (userId: string, chatId: string, prompt: string) => {
-    const result = await streamText({
-        model: openai("gpt-4"),
-        prompt,
-    });
-    const IAResponse = (await result.toTextStreamResponse().text()).trim()
-    try {
-        const userMessage = await db.message.create({
-            data: {
-                chatId,
-                userId,
-                role: "user",
-                content: prompt
-            }
-        })
-        const IAMessage = await db.message.create({
-            data: {
-                chatId,
-                userId,
-                role: "ai",
-                content: IAResponse
-            }
-        })
-        revalidatePath(`/chat/${chatId}`)
-        return {
-            userMessage,
-            IAMessage
-        }
-    } catch (error: any) {
-        return {
-            error: error.message
         }
     }
 }

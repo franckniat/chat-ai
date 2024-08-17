@@ -9,7 +9,6 @@ import StyledMarkdown from "./styled-markdown";
 import {
 	chatCompletion,
 	createNewChat,
-	sendMessage,
 	sendUserMessage,
 } from "@/actions/message";
 import { toast } from "sonner";
