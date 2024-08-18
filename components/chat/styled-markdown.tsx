@@ -61,7 +61,7 @@ const StyledMarkdown: React.FC<StyledMarkdownProps> = ({ content }) => {
 							{...props}
 						/>
 					) : (
-						<div className="my-2">
+						<div className="my-1 max-w-[600px]">
 							<div className="text-xs font-semibold text-foreground/40 mb-1">
 								{language}
 							</div>
