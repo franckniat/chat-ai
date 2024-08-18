@@ -8,12 +8,13 @@ import MessagesContent from '@/components/chat/messages';
 
 export default async function ChatPage({params}:{params:{id: string}}) {
     const user = await getUser();
-    if(!user) {
+    if(!user?.id) {
         notFound();
     }
     const { id } = params;
-    const chat = await getChatById(id);
+    const chat = await getChatById(id, user.id);
     const messages = await getMessagesBychatId(chat!.id)
+
     return (
         <>
             <MessagesContent chatID={id} messages={messages}/>
