@@ -2,7 +2,7 @@
 import * as React from "react";
 import useCurrentUser from "@/hooks/use-current-user";
 import FormChat from "./form-chat";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useRouter } from "next/navigation";
 import { Message } from "@prisma/client";
 import StyledMarkdown from "./styled-markdown";
@@ -13,7 +13,14 @@ import {
 } from "@/actions/message";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { ArrowDown, BookOpen, Calendar, Loader2, Mail, Wrench } from "lucide-react";
+import {
+	ArrowDown,
+	BookOpen,
+	Calendar,
+	Loader2,
+	Mail,
+	Wrench,
+} from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 
@@ -24,7 +31,6 @@ export default function MessagesContent({
 	chatID: string;
 	messages: Message[];
 }) {
-
 	const newChatOptions = [
 		{
 			title: "Aide moi à résumer ce mail",
@@ -46,7 +52,7 @@ export default function MessagesContent({
 			content: "J'ai besoin d'aide pour rédiger un mémoire",
 			icon: <BookOpen size={24} />,
 		},
-	]
+	];
 	const user = useCurrentUser();
 	const router = useRouter();
 	const [input, setInput] = React.useState("");
@@ -92,7 +98,7 @@ export default function MessagesContent({
 				router.push(`/chat/${res.chatID}`);
 			}
 		});
-	}
+	};
 
 	const handleSendMessage = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -148,13 +154,19 @@ export default function MessagesContent({
 					messagesData.map((m) => (
 						<div key={m.id} className="flex gap-2 py-6 relative">
 							{m.role === "user" ? (
-								<Avatar className="border-4 border-primary-foreground">
-									<AvatarFallback>
-										{user?.name?.charAt(0).toUpperCase()}
-									</AvatarFallback>
+								<Avatar className="border-4 border-foreground/60 pointer-events-none cursor-pointer">
+									{user.image ? (
+										<AvatarImage src={user.image}/>
+									) : (
+										<AvatarFallback>
+											{user?.name
+												?.charAt(0)
+												.toUpperCase()}
+										</AvatarFallback>
+									)}
 								</Avatar>
 							) : (
-								<Avatar className="border-4 border-primary">
+								<Avatar className="border-4 border-primary cursor-pointer pointer-events-none">
 									<AvatarFallback>AI</AvatarFallback>
 								</Avatar>
 							)}
@@ -186,7 +198,9 @@ export default function MessagesContent({
 			</div>
 			{chatID === "" && (
 				<div className="max-w-3xl mx-auto px-3 pt-[50px]">
-					<h1 className="text-3xl text-center font-bold">N<span className="text-primary">C</span></h1>
+					<h1 className="text-3xl text-center font-bold">
+						N<span className="text-primary">C</span>
+					</h1>
 					<h2 className="text-xl font-semibold text-center my-3">
 						Commencer à discuter avec l&#39;assistant
 					</h2>
@@ -195,7 +209,9 @@ export default function MessagesContent({
 							<Card
 								key={index}
 								className="cursor-pointer hover:bg-foreground/5"
-								onClick={() => handleCreateChatByPrompt(option.content)}
+								onClick={() =>
+									handleCreateChatByPrompt(option.content)
+								}
 							>
 								<CardContent className="flex justify-center gap-3 flex-col items-center p-3 text-foreground/60">
 									{option.icon}
