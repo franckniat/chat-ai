@@ -2,6 +2,14 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { JetBrains_Mono } from "next/font/google";
+import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { Button } from "../ui/button";
+import { Copy } from "lucide-react";
+import { toast } from "sonner";
+
+const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"] });
 
 interface StyledMarkdownProps {
 	content: string;
@@ -12,7 +20,6 @@ const StyledMarkdown: React.FC<StyledMarkdownProps> = ({ content }) => {
 		<ReactMarkdown
 			remarkPlugins={[remarkGfm]}
 			rehypePlugins={[rehypeRaw]}
-			className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl prose-headings:text-primary prose-a:text-blue-600 prose-blockquote:border-l-4 prose-blockquote:border-foreground/30"
 			components={{
 				h1: ({ node, ...props }) => (
 					<h1 className="text-3xl font-bold my-4" {...props} />
@@ -45,40 +52,62 @@ const StyledMarkdown: React.FC<StyledMarkdownProps> = ({ content }) => {
 					/>
 				),
 				ul: ({ node, ...props }) => (
-					<ul className="list-disc pl-6 my-2" {...props} />
+					<ul className="list-disc pl-0 sm:pl-2 md:pl-6 my-2" {...props} />
 				),
 				ol: ({ node, ...props }) => (
-					<ol className="list-decimal pl-6 my-2" {...props} />
+					<ol className="list-decimal pl-0 sm:pl-2 md:pl-6 my-2" {...props} />
 				),
-				code: ({ node, ...props }) => {
-					const isInline = node!.tagName === "code";
-					const language = props.className
-						? props.className.replace("language-", "")
-						: "plaintext";
+				code: ({ className, style, ...props }) => {
+					let language;
+					if (className) {
+						language =
+							className.replace("language-", "") || "plainText";
+					}
+					const isInline = className === undefined;
 					return isInline ? (
 						<code
-							className="bg-foreground/5 text-primary px-1 py-0.5 rounded"
-							{...props}
-						/>
+							className={
+								"text-sm text-primary p-0.5 bg-foreground/5 rounded-sm"
+							}
+						>
+							{props.children}
+						</code>
 					) : (
-						<div className="my-1 max-w-[600px]">
-							<div className="text-xs font-semibold text-foreground/40 mb-1">
-								{language}
+						<div
+							className={`${jetBrainsMono.className} text-sm px-1 relative group`}
+						>
+							<div className="flex justify-between gap-2 items-center">
+								<span className="text-sm text-foreground/80">
+									{language}
+								</span>
+								<button className="p-2 flex sm:hidden">Copier le code</button>
 							</div>
-							<pre className="bg-foreground/5 text-foreground p-2 rounded block overflow-auto">
-								<code
-									className={`language-${language}`}
-									{...props}
-								>
-									{props.children}
-								</code>
-							</pre>
+							<Button
+								variant={"outline"}
+								size={"icon"}
+								className="absolute hidden sm:flex top-9 right-3 opacity-0 group-hover:opacity-100 transition-all scale-100 active:scale-95 w-8 h-8"
+								onClick={() => {
+									navigator.clipboard.writeText(content);
+									toast.success(
+										"Contenu ajouté dans le presse-papiers"
+									);
+								}}
+							>
+								<Copy size={15} />
+							</Button>
+							<SyntaxHighlighter
+								language={language}
+								style={dracula}
+								className={`${jetBrainsMono.className} antialiased max-w-3xl overflow-x-scroll code-content`}
+							>
+								{String(props.children).replace(/\n$/, "")}
+							</SyntaxHighlighter>
 						</div>
 					);
 				},
 				pre: ({ node, ...props }) => (
 					<pre
-						className="bg-foreground/5 text-foreground p-4 rounded-lg overflow-auto"
+						className={`bg-foreground/5 text-foreground p-4 rounded-lg overscroll-auto`}
 						{...props}
 					/>
 				),

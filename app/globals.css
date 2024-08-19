@@ -88,3 +88,8 @@
 .scroll-button.hide {
     transform: translateY(0);
 }
+
+.code-content{
+    font-family: "JetBrains Mono", sans-serif !important;
+    overflow-x: scroll !important;
+}
