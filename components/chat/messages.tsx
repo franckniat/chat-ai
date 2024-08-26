@@ -22,7 +22,6 @@ import {
 	Wrench,
 } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
-import Link from "next/link";
 
 export default function MessagesContent({
 	chatID,
@@ -80,7 +79,7 @@ export default function MessagesContent({
 					}
 				});
 			},
-			{ threshold: 0.5 }
+			{ threshold: 0.4 }
 		);
 		if (messagesEndRef) {
 			observer.observe(messagesEndRef);
@@ -136,7 +135,6 @@ export default function MessagesContent({
 										res.iAmessage,
 									]);
 								}
-								scrollToBottom();
 							});
 						}
 					}
