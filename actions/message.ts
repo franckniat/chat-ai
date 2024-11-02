@@ -19,7 +19,7 @@ export const createNewChat = async (userId: string, prompt: string) => {
 
     const result = await streamText({
         model: openai("gpt-4o"),
-        prompt: `Prend ce message et reformule le moi en titre de conversation: ${prompt} `,
+        prompt: `Prend ce message et reformule le moi en titre de conversation original: ${prompt} `,
     })
     const resultPrompt = await streamText({
         model: openai('gpt-4o'),
@@ -60,8 +60,6 @@ export const createNewChat = async (userId: string, prompt: string) => {
 
     return {
         chatID,
-        userMessage,
-        IAMessage
     }
 }
 
@@ -76,7 +74,8 @@ export const sendUserMessage = async (userId: string, chatId: string, message: s
             }
         })
         revalidatePath(`/chat/${chatId}`)
-        return { userMessage };
+        await chatCompletion(userId,chatId, message)
+        revalidatePath(`/chat/${chatId}`)
     }
     catch (e) {
         return {
@@ -100,10 +99,6 @@ export const chatCompletion = async (userId: string, chatId: string, message: st
                 content: IAResponse
             }
         })
-        revalidatePath(`/chat/${chatId}`)
-        return {
-            iAmessage: IAMessage,
-        }
     } catch (e) {
         return {
             error: "Un problème est survenu, vérifier votre connexion internet."
